@@ -1,20 +1,21 @@
-import SearchSection from "./SearchSection";
-export default function Navbar( ){
+import SectionSearch from "./SectionSearch";
+export default function NavBar() {
+
+
     return (
-        <nav className="flex  justify-between p-4 m-4 ">
-            <div >
-                <img src="logohouse.png" alt="" className="h-15 w-15 " />
+        <div className="flex flex-row items-center justify-between">
+            <div className="pl-12">
+                <img src="logo.png" className="w-8 h-8" />
             </div>
-            <div className="flex flex-row bg-amber-100 rounded-full items-center p-4" >
-                <SearchSection s="When" className="text-center"/>
-                <SearchSection s="Where" className="text-center"/>
-                <SearchSection s="Who" className="text-center"/>
+            <div className="flex flex-row bg-amber-100 rounded-full">
+                <SectionSearch s="When" />
+                <SectionSearch s="Where" />
+                <SectionSearch s="Who" />
             </div>
             <div className="pr-12">
-                <button className=" text-black rounded-full p-2 bg-amber-50 hover:bg-amber-100 text-xl">Become a host </button>       
-        
+                <button className="rounded-full p-2 bg-amber-50 hover:bg-amber-800 text-xl">Become a host</button>
             </div>
 
-        </nav>
-    )
+        </div>
+    );
 }
