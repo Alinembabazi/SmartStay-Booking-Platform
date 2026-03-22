@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "https://airbnb19.p.rapidapi.com/api/v2";
 const RAPID_API_HOST = "airbnb19.p.rapidapi.com";
-const RAPID_API_KEY = "112f38fbe7e9fmsh0f48342cb0b7f70p105ee3jsn3101129b409alkjhljhgc"
+const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
 
 if (!RAPID_API_KEY) {
   // eslint-disable-next-line no-console
