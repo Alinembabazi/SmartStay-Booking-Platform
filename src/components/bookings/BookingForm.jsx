@@ -8,7 +8,7 @@ export default function BookingForm({ listing }) {
     const [feedback, setFeedback] = useState(null);
 
     const onSubmit = (event) => {
-        event.preventDefault();
+        event.preventDefault(); // stop the page from refreshing
         if (!checkin || !checkout) {
             setFeedback({
                 type: "error",

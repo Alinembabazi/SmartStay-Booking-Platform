@@ -24,14 +24,14 @@ export default function Navbar() {
         <header className="sticky top-0 z-10 border-b bg-white/90 px-4 py-3 backdrop-blur">
             <div className="mx-auto flex max-w-6xl items-center gap-4">
                 <Link to="/" className="font-bold text-xl text-slate-900">
-                    StayNest
+                   <img src="logohouse.png" alt="" /> 
                 </Link>
-                <div className="flex-1">
+                <div className="flex-1 font-bold text-2xl">
                     <SearchBar initialValue={filters.query} onSearch={handleSearch} />
                 </div>
                 <nav className="flex items-center gap-3 text-sm">
-                    <Link to="/favorites">Favorites</Link>
-                    <Link to="/bookings">Bookings</Link>
+                    <Link to="/favorites" className="font-bold text-2xl">Favorites</Link>
+                    <Link to="/bookings" className="font-bold text-2xl">Bookings</Link>
                     <UserProfileCard compact />
                 </nav>
             </div>
