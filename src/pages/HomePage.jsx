@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import SidebarFilters from "../components/layout/SidebarFilters";
@@ -10,11 +10,25 @@ import { useFilters } from "../context/FiltersContext";
 
 const DEFAULT_PLACE_ID = "ChIJ7cv00DwsDogRAMDACa2m4K8";
 
+function parsePrice(value) {
+    if (!value) return NaN;
+    const normalized = String(value).replace(/,/g, "");
+    const match = normalized.match(/\$\s*(\d+(?:\.\d+)?)/);
+    if (!match?.[1]) return NaN;
+    return Number(match[1]);
+}
+
 export default function HomePage() {
-    const { filters } = useFilters();
+    const { filters, setFilters } = useFilters();
     const [searchParams] = useSearchParams();
 
     const queryText = searchParams.get("q") || filters.query;
+
+    useEffect(() => {
+        if (queryText !== filters.query) {
+            setFilters((prev) => ({ ...prev, query: queryText }));
+        }
+    }, [filters.query, queryText, setFilters]);
 
     const queryInput = useMemo(
         () => ({
@@ -31,15 +45,21 @@ export default function HomePage() {
 
     const filtered = useMemo(() => {
         const list = data?.normalized || [];
+        const minPrice = Number(filters.minPrice);
+        const maxPrice = Number(filters.maxPrice);
+        const minRating = Number(filters.minRating);
 
         return list.filter((item) => {
             const textOk = !queryText || item.title.toLowerCase().includes(queryText.toLowerCase()) || item.city.toLowerCase().includes(queryText.toLowerCase());
             const locationOk = !filters.location || item.city.toLowerCase().includes(filters.location.toLowerCase());
+            const priceNumber = parsePrice(item.price);
+            const minPriceOk = !filters.minPrice || (!Number.isNaN(priceNumber) && priceNumber >= minPrice);
+            const maxPriceOk = !filters.maxPrice || (!Number.isNaN(priceNumber) && priceNumber <= maxPrice);
             const ratingNumber = Number(item.rating);
-            const minRatingOk = !filters.minRating || Number.isNaN(ratingNumber) || ratingNumber >= Number(filters.minRating);
-            return textOk && locationOk && minRatingOk;
+            const minRatingOk = !filters.minRating || (!Number.isNaN(ratingNumber) && ratingNumber >= minRating);
+            return textOk && locationOk && minPriceOk && maxPriceOk && minRatingOk;
         });
-    }, [data?.normalized, filters.location, filters.minRating, queryText]);
+    }, [data?.normalized, filters.location, filters.maxPrice, filters.minPrice, filters.minRating, queryText]);
 
     return (
         <div className="min-h-screen bg-slate-100">
@@ -57,11 +77,18 @@ export default function HomePage() {
                     ) : null}
 
                     {!isLoading && !isError ? (
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {filtered.map((listing) => (
-                                <ListingCard key={listing.id} listing={listing} />
-                            ))}
-                        </div>
+                        <>
+                            {!filtered.length ? (
+                                <div className="rounded-xl border border-slate-200 bg-white p-5 text-slate-600">
+                                    No listings match your current search and filters.
+                                </div>
+                            ) : null}
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                {filtered.map((listing) => (
+                                    <ListingCard key={listing.id} listing={listing} />
+                                ))}
+                            </div>
+                        </>
                     ) : null}
                 </section>
             </main>

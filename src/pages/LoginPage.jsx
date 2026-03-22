@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUserProfile } from "../context/UserProfileContext";
 
 export default function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
+    const { login } = useUserProfile();
     const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
 
     const from = location.state?.from || "/";
 
     const onSubmit = (event) => {
         event.preventDefault();
         if (!name.trim()) return;
-        localStorage.setItem("auth_user", name.trim());
+        login({ name, email });
         navigate(from, { replace: true });
     };
 
@@ -23,7 +26,14 @@ export default function LoginPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="mb-3 w-full rounded-md border p-2"
-                    placeholder="Enter username"
+                    placeholder="Enter your name"
+                />
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mb-3 w-full rounded-md border p-2"
+                    placeholder="Email (optional)"
                 />
                 <button className="w-full rounded-md bg-slate-900 px-4 py-2 text-white" type="submit">
                     Continue
