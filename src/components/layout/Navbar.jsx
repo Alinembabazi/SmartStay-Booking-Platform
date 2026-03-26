@@ -11,8 +11,6 @@ export default function Navbar() {
     const handleSearch = (query) => {
         const trimmed = query.trim();
         setFilters((prev) => ({ ...prev, query: trimmed }));
-
-        // Keep user on the current screen; only auto-navigate when already on Home.
         if (location.pathname !== "/") {
             return;
         }
@@ -22,9 +20,9 @@ export default function Navbar() {
 
     return (
         <header className="sticky top-0 z-10 border-b bg-white/90 px-4 py-3 backdrop-blur">
-            <div className="mx-auto flex max-w-6xl items-center gap-4">
+            <div className="mx-auto flex  justify-between gap-4">
                 <Link to="/" className="font-bold text-xl text-slate-900">
-                   <img src="logohouse.png" alt="" /> 
+                   <img src="logohouse.png" alt="" className="w-15 h-15 " /> 
                 </Link>
                 <div className="flex-1 font-bold text-2xl">
                     <SearchBar initialValue={filters.query} onSearch={handleSearch} />

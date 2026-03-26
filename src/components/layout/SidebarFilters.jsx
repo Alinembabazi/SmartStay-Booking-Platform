@@ -16,8 +16,8 @@ export default function SidebarFilters() {
   };
 
   return (
-    <aside className="space-y-3 rounded-xl bg-white p-4 shadow">
-      <h2 className="font-semibold">Filters</h2>
+    <aside className="space-y-3 rounded-xl bg-white p-4 shadow justify-start w-full">
+      <h2 className="font-bold">Filters</h2>
 
       <input
         value={filters.location}
